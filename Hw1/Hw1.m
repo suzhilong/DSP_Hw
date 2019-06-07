@@ -31,7 +31,8 @@ origin_data=uint8(fread(file));
 %第3题
 bit_num=get_24bit(origin_data);
 true_values=get_trueValue(bit_num);
-voltages=(4.5/(2^24-1)*true_values);
+voltages=(4.5*2/(2^24-1)*true_values);%单位V
+voltages=voltages*10^6;%单位uV
 % plot_data(voltages);
 
 
@@ -47,14 +48,14 @@ mid=median(voltages);%中位数
 modev=mode(voltages);%众数
 RMS=sqrt(sum(voltages.^2)/length(voltages));
 Vpp=6.6*RMS;
-% disp(RMS);
-% disp(Vpp); 
-% disp(means);
-% disp(mid);
-% disp(modev);
-% disp(stds);
-% disp(st_Error);
-% disp(vars);
+disp('RMS:');disp(RMS);
+disp('Vpp:');disp(Vpp); 
+disp('means:');disp(means);
+disp('mid:');disp(mid);
+disp('modev:');disp(modev);
+disp('stds:');disp(stds);
+disp('st_Error');disp(st_Error);
+disp('vars:');disp(vars);
 
 %plot_data
 function plot_data(true_values)
@@ -63,12 +64,12 @@ function plot_data(true_values)
     figure;
     plot(x,y);
     xlabel('Time(s)');
-    ylabel('Voltage(V)');
+    ylabel('Voltage(µV)');
 end
 %plot_frequence
 function plot_frequence(voltages)
     hist(voltages,21);
-    xlabel('Voltages(V)');
+    xlabel('Voltages(µV)');
     ylabel('frequences');
 end
 
@@ -82,7 +83,7 @@ function true_value=get_trueValue(bit_num)
         value=bin2dec(c(10:32))+1;%+1
     %     disp(a);
     %     disp(c(10:32));
-    %     disp(value);
+%          disp(value);
         %事实证明 求反+1 等于 -1求反
         % tmp=(bin2dec(bit_num(1,2:24))-1);%-1
         % d=dec2bin(bitcmp(tmp,'uint32'));%求反
@@ -94,6 +95,7 @@ function true_value=get_trueValue(bit_num)
         end
     end
     true_value=values/24;
+%     disp(true_value);
 end
 
 
@@ -134,7 +136,7 @@ function bit24List=recover(origin_data)
 %         disp(bit24);
         bit24List=[bit24List;bit24];
     end
-    % disp(bit24List(1,:));
+%     disp(bit24List(1,:));
 end
 
 % %%%%%%%%%%%%%%%%%%%%%%%%
